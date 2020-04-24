@@ -33,5 +33,18 @@ spec:
     requests:
       cpu: 400m
       memory: 768Mi
+  vault:
+    enabled: true
+    paths:
+      - kvPath: /azuread/data/dev/creds/padm2regler
+        mountPath: /secrets/azuread/padm2regler
+      - kvPath: serviceuser/data/dev/srvpadm2regler
+        mountPath: /secrets/serviceuser
+  webproxy: true
   ingresses:
     - "https://padm2regler.nais.preprod.local"
+  env:
+    - name: HELSENETTPROXY_ID
+      value: c18eba24-f676-47db-9a97-3c66e9304aee
+    - name: AADACCESSTOKEN_URL
+      value: https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/token

@@ -10,6 +10,10 @@ val logbackVersion = "1.2.3"
 val logstashEncoderVersion = "5.1"
 val prometheusVersion = "0.6.0"
 val jacksonVersion = "2.9.7"
+val padmCommonVersion = "1.a9e3cc6"
+val kluentVersion = "1.49"
+val junitJupiterVersion = "5.6.0"
+val mockkVersion = "1.9.3"
 
 plugins {
     kotlin("jvm") version "1.3.72"
@@ -47,6 +51,21 @@ dependencies {
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+
+    implementation("no.nav.syfo:padm-common-models:$padmCommonVersion")
+    implementation("no.nav.syfo:padm-common-rest-sts:$padmCommonVersion")
+    implementation("no.nav.syfo:padm-common-networking:$padmCommonVersion")
+
+    testImplementation("org.amshove.kluent:kluent:$kluentVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion") {
+        exclude(group = "org.eclipse.jetty")
+    }
+
 }
 
 tasks {
