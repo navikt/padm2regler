@@ -1,15 +1,11 @@
 package no.nav.syfo.client
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
-import io.ktor.client.request.accept
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpStatement
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.util.*
 import no.nav.syfo.VaultSecrets
 import no.nav.syfo.helpers.retry
 import no.nav.syfo.log

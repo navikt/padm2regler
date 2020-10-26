@@ -15,9 +15,10 @@ enum class HPRRuleChain(
     BEHANDLER_IKKE_GYLDIG_I_HPR(
         1402,
         Status.INVALID,
-        "Den som skrev legeerklæringen manglet autorisasjon.",
+        "Den som skrev dialogmeldingen manglet autorisasjon.",
         "Dialogmelding kan ikke rettes, det må skrives en ny. Grunnet følgende:" +
-                "Behandler er ikke gyldig i HPR på konsultasjonstidspunkt", { (_, behandler) ->
+                "Behandler er ikke gyldig i HPR på konsultasjonstidspunkt",
+        { (_, behandler) ->
             !behandler.godkjenninger.any {
                 it.autorisasjon?.aktiv != null && it.autorisasjon.aktiv
             }
@@ -26,8 +27,8 @@ enum class HPRRuleChain(
     BEHANDLER_MANGLER_AUTORISASJON_I_HPR(
         1403,
         Status.INVALID,
-        "Den som skrev legeerklæringen manglet autorisasjon.",
-        "Behandler har ikke til gyldig autorisasjon i HPR", { (_, behandler) ->
+        "Den som skrev dialogmeldingen manglet autorisasjon.",
+        "Behandler har ikke gyldig autorisasjon i HPR", { (_, behandler) ->
             !behandler.godkjenninger.any {
                 it.autorisasjon?.aktiv != null &&
                         it.autorisasjon.aktiv &&
