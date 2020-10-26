@@ -28,7 +28,8 @@ enum class HPRRuleChain(
         1403,
         Status.INVALID,
         "Den som skrev dialogmeldingen manglet autorisasjon.",
-        "Behandler har ikke gyldig autorisasjon i HPR", { (_, behandler) ->
+        "Behandler har ikke gyldig autorisasjon i HPR",
+        { (_, behandler) ->
             !behandler.godkjenninger.any {
                 it.autorisasjon?.aktiv != null &&
                         it.autorisasjon.aktiv &&
@@ -43,7 +44,8 @@ enum class HPRRuleChain(
         Status.INVALID,
         "Den som skrev dialogmelding manglet autorisasjon.",
         "Dialogmelding kan ikke rettes, det må skrives en ny. Grunnet følgende:" +
-                "Behandler finnes i HPR men er ikke lege, kiropraktor, fysioterapeut, manuellterapeut tannlege eller psykolog", { (_, behandler) ->
+                "Behandler finnes i HPR men er ikke lege, kiropraktor, fysioterapeut, manuellterapeut tannlege eller psykolog",
+        { (_, behandler) ->
             !behandler.godkjenninger.any {
                 it.helsepersonellkategori?.aktiv != null &&
                         it.autorisasjon?.aktiv == true && it.helsepersonellkategori.verdi != null &&
