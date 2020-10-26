@@ -34,10 +34,10 @@ class RuleService(
                 mottakId = receivedDialogmelding.navLogId,
                 orgNr = receivedDialogmelding.legekontorOrgNr,
                 msgId = receivedDialogmelding.msgId,
-                legeerklaeringId = receivedDialogmelding.dialogmelding.id
+                dialogmeldingId = receivedDialogmelding.dialogmelding.id
             )
 
-            log.info("Received a SM2013, going to rules, {}", fields(loggingMeta))
+            log.info("Received a dialogmelding, going to rules, {}", fields(loggingMeta))
 
             val dialogmelding = receivedDialogmelding.dialogmelding
 
