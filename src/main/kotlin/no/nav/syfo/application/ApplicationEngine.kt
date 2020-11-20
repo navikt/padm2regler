@@ -1,6 +1,7 @@
 package no.nav.syfo.application
 
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -40,7 +41,6 @@ fun createApplicationEngine(environment: Environment, applicationState: Applicat
                 call.respond(HttpStatusCode.InternalServerError, cause.message ?: "Unknown error")
 
                 log.error("Caught exception", cause)
-                throw cause
             }
         }
         routing {

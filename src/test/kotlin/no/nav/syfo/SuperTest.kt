@@ -6,27 +6,17 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.client.*
-import io.ktor.client.engine.apache.*
-import io.ktor.client.features.json.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.server.testing.*
-import io.mockk.*
-import io.netty.handler.codec.http.HttpHeaders.addHeader
+import io.mockk.coEvery
+import io.mockk.mockk
 import no.nav.syfo.api.registerRuleApi
 import no.nav.syfo.application.ApplicationState
 import no.nav.syfo.application.api.registerNaisApi
-import no.nav.syfo.application.createApplicationEngine
-import no.nav.syfo.clients.HttpClients
 import no.nav.syfo.metrics.monitorHttpRequests
 import no.nav.syfo.model.Dialogmelding
 import no.nav.syfo.model.ReceivedDialogmelding
@@ -34,7 +24,6 @@ import no.nav.syfo.services.RuleService
 import org.amshove.kluent.`should be less or equal to`
 import org.amshove.kluent.shouldBe
 import org.junit.Test
-import java.nio.file.Paths
 import java.time.LocalDateTime
 
 internal class SuperTest {
@@ -51,18 +40,19 @@ internal class SuperTest {
         "username",
         "password",
         "clientId",
-        "clientSecret") // Ryan Seacrest
+        "clientSecret"
+    ) // Ryan Seacrest
 
     @Test
     fun `ny test`() {
         val testApp = TestApplicationEngine()
-            testApp.start(false)
+        testApp.start(false)
 
         val appState = ApplicationState()
 
         val mockRuleService = mockk<RuleService>()
 
-        coEvery { mockRuleService.executeRuleChains(any()) } throws RuntimeException("MOCK Huff, noe gikk galt! :( :(")
+        coEvery { mockRuleService.executeRuleChains(any()) } throws NullPointerException("dasd")
 
         testApp.application.install(ContentNegotiation) {
             jackson {
@@ -77,7 +67,7 @@ internal class SuperTest {
                 call.respond(HttpStatusCode.InternalServerError, cause.message ?: "Unknown error")
 
                 log.error("Caught exception", cause)
-                throw cause
+//                throw cause
             }
         }
         testApp.application.routing {
@@ -94,13 +84,10 @@ internal class SuperTest {
 
 
 fun TestApplicationEngine.doStuff() {
-    println("1")
     with(
         handleRequest(HttpMethod.Post, "/v1/rules/validate") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-//            val mockDialogmelding = mockk<Dialogmelding>()
-//            val mockReceivedDialogmelding = mockk<ReceivedDialogmelding>()
-//            val mockReceivedDialogmeldingJson = objectMapper.writeValueAsString(mockReceivedDialogmelding)
+            addHeader(HttpHeaders.Accept, ContentType.Application.Json.toString())
 
             val dialogmelding = Dialogmelding(
                 id = "id123",
@@ -112,7 +99,7 @@ fun TestApplicationEngine.doStuff() {
             val receivedDialogmelding = ReceivedDialogmelding(
                 dialogmelding = dialogmelding,
                 personNrPasient = "12345678901",
-                pasientAktoerId= "123456789012",
+                pasientAktoerId = "123456789012",
                 personNrLege = "98765432198",
                 legeAktoerId = "987654321987",
                 navLogId = "LogId",
@@ -131,6 +118,7 @@ fun TestApplicationEngine.doStuff() {
             setBody(receivedDialogmeldingJson)
         }
     ) {
+        println(response)
         response.status() shouldBe HttpStatusCode.OK
     }
 }

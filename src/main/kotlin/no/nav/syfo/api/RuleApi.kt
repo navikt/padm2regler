@@ -18,7 +18,6 @@ val log: Logger = LoggerFactory.getLogger("no.nav.syfo.smregler")
 fun Routing.registerRuleApi(ruleService: RuleService) {
     post("/v1/rules/validate") {
         log.info("Got an request to validate rules")
-        println("FOOOOO!!!")
 
         val receivedDialogmelding: ReceivedDialogmelding = call.receive()
 
