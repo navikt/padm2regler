@@ -1,22 +1,19 @@
 package no.nav.syfo.client
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
-import io.ktor.client.request.accept
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.statement.HttpStatement
-import io.ktor.http.ContentType
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
 import io.ktor.http.HttpStatusCode.Companion.NotFound
-import io.ktor.util.KtorExperimentalAPI
-import java.io.IOException
+import io.ktor.util.*
 import net.logstash.logback.argument.StructuredArguments.fields
-import no.nav.syfo.helpers.retry
 import no.nav.syfo.log
 import no.nav.syfo.no.nav.syfo.client.AccessTokenClient
 import no.nav.syfo.util.LoggingMeta
+import java.io.IOException
 
 @KtorExperimentalAPI
 class NorskHelsenettClient(
@@ -26,11 +23,9 @@ class NorskHelsenettClient(
     private val httpClient: HttpClient
 ) {
 
-    suspend fun finnBehandler(behandlerFnr: String, msgId: String, loggingMeta: LoggingMeta): Behandler? = retry(
-        callName = "finnbehandler",
-        retryIntervals = arrayOf(500L, 1000L, 1000L)) {
+    suspend fun finnBehandler(behandlerFnr: String, msgId: String, loggingMeta: LoggingMeta): Behandler? {
         log.info("Henter behandler fra syfohelsenettproxy for msgId {}", msgId)
-        val httpResponse = httpClient.get<HttpStatement>("$endpointUrl/api/behandler") {
+        val httpStatement = httpClient.get<HttpStatement>("$endpointUrl/api/behandler") {
             accept(ContentType.Application.Json)
             val accessToken = accessTokenClient.hentAccessToken(resourceId)
             headers {
@@ -38,8 +33,11 @@ class NorskHelsenettClient(
                 append("Nav-CallId", msgId)
                 append("behandlerFnr", behandlerFnr)
             }
-        }.execute()
-        when (httpResponse.status) {
+        }
+
+        val httpResponse = httpStatement.execute()
+
+        return when (httpResponse.status) {
             InternalServerError -> {
                 log.error("Syfohelsenettproxy svarte med feilmelding for msgId {}, {}", msgId, fields(loggingMeta))
                 throw IOException("Syfohelsenettproxy svarte med feilmelding for $msgId")
@@ -47,12 +45,12 @@ class NorskHelsenettClient(
 
             BadRequest -> {
                 log.error("BehandlerFnr mangler i request for msgId {}, {}", msgId, fields(loggingMeta))
-                return@retry null
+                null
             }
 
             NotFound -> {
                 log.warn("BehandlerFnr ikke funnet {}, {}", msgId, fields(loggingMeta))
-                return@retry null
+                null
             }
             else -> {
                 log.info("Hentet behandler for msgId {}, {}", msgId, fields(loggingMeta))

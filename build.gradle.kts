@@ -54,7 +54,6 @@ dependencies {
 
     implementation("no.nav.syfo:padm-common-models:$padmCommonVersion")
     implementation("no.nav.syfo:padm-common-rest-sts:$padmCommonVersion")
-    implementation("no.nav.syfo:padm-common-networking:$padmCommonVersion")
 
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
