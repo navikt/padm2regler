@@ -40,7 +40,6 @@ fun createApplicationEngine(environment: Environment, applicationState: Applicat
                 call.respond(HttpStatusCode.InternalServerError, cause.message ?: "Unknown error")
 
                 log.error("Caught exception", cause)
-                throw cause
             }
         }
         routing {
