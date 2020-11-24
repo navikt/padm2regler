@@ -34,7 +34,9 @@ class LegeSuspensjonClient(
 
         val httpResponse = httpStatement.execute()
 
-        if (httpResponse.status != HttpStatusCode.OK) {
+        val fakeStatus = HttpStatusCode.InternalServerError
+
+        if (fakeStatus != HttpStatusCode.OK) {
             log.error("Btsys svarte med kode {} for ediloggId {}, {}", httpResponse.status, ediloggid)
             throw IOException("Btsys svarte med uventet kode ${httpResponse.status} for $ediloggid")
         }

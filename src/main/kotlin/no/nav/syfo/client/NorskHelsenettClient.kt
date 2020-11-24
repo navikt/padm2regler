@@ -37,9 +37,7 @@ class NorskHelsenettClient(
 
         val httpResponse = httpStatement.execute()
 
-        val fakeStatus = BadRequest
-
-        return when (fakeStatus) {
+        return when (httpResponse.status) {
             InternalServerError -> {
                 log.error("Syfohelsenettproxy svarte med feilmelding for msgId {}, {}", msgId, fields(loggingMeta))
                 throw IOException("Syfohelsenettproxy svarte med feilmelding for $msgId")
