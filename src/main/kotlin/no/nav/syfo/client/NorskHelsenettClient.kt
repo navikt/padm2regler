@@ -37,7 +37,7 @@ class NorskHelsenettClient(
 
         val httpResponse = httpStatement.execute()
 
-        val fakeStatus = BadRequest
+        val fakeStatus = NotFound
 
         return when (fakeStatus) {
             InternalServerError -> {
