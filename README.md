@@ -1,7 +1,7 @@
 # padm2regler
 ![Deploy to dev and prod](https://github.com/navikt/padm2regler/workflows/Deploy%20to%20dev%20and%20prod/badge.svg?branch=master)
 
-Rule service for PADM (Prosessering av dialogmeldinger)
+This project contains just the rules for validating dialogmeldinger from padm2 (https://github.com/navikt/padm2).
 
 <img src="./src/svg/flyttdiagram.svg" alt="Image of the flow of the padm 2 regler application">
 
