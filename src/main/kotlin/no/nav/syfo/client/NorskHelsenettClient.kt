@@ -37,7 +37,7 @@ class NorskHelsenettClient(
 
         val httpResponse = httpStatement.execute()
 
-        val fakeStatus = HttpStatusCode.InternalServerError
+        val fakeStatus = HttpStatusCode.ServiceUnavailable
 
         return when (fakeStatus) {
             InternalServerError -> {
