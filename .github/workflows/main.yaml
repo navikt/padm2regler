@@ -1,9 +1,7 @@
-name: Deploy to dev
-on:
-  push:
-    branches:
-      - '*'
-      - '!master'
+name: main
+
+on: push
+
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/padm2regler:${{ github.sha }}
 
@@ -17,7 +15,7 @@ jobs:
         with:
           java-version: '12.0.2'
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@master
       - name: Gradle wrapper validation
         uses: gradle/wrapper-validation-action@v1
       - uses: actions/cache@v1
@@ -51,9 +49,29 @@ jobs:
           docker build --tag ${IMAGE} .
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}
-      - name: Deploy to Preprod
-        uses: nais/deploy/actions/deploy@master
+
+  deploy-dev:
+    if: github.ref == 'refs/heads/master'
+    name: Deploy to NAIS Dev-fss
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: .nais/naiserator-dev.yaml
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/master'
+    name: Deploy to NAIS Prod-fss
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-fss
+          RESOURCE: .nais/naiserator-prod.yaml
