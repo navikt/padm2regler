@@ -1,3 +1,10 @@
+# Archived
+Padm2regler is no longer in use and is archived.
+The functionality of padm2regler has been reimplemented in the application padm2.
+Previously, padm2 called padm2regler to get a response,
+instead padm2 now includes this functionality and hence reduces complexity by removing a redundant http-request and gathering the padm2-domain in one application.
+
+
 # padm2regler
 ![Deploy to dev and prod](https://github.com/navikt/padm2regler/workflows/Deploy%20to%20dev%20and%20prod/badge.svg?branch=master)
 
